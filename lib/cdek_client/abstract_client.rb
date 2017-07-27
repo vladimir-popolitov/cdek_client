@@ -9,6 +9,10 @@ require 'cdek_client/util'
 module CdekClient
   class AbstractClient
 
+    def logger
+      @logger ||= ActiveSupport::Logger.new('cdek')
+    end
+
     protected
 
     def url_for(host_key, path_key)
@@ -94,21 +98,26 @@ module CdekClient
       end
 
       begin
+        logger.debug "Request #{method} #{url}: #{request_params.inspect}"
         response = HTTParty.send method, url, request_params
         if response.code == 200
+          logger.debug "Response [SUCCESS]: #{response.body}"
           return CdekClient::Result.new response, response.body
         else
+          logger.debug "Response [ERROR]: #{response.code} #{response.message}"
           raise CdekClient::ResponseError.new response.code, response.message
         end
       rescue CdekClient::ResponseError, HTTParty::ResponseError => e
         if Util.blank? retry_url
           error = e.is_a?(CdekClient::ResponseError) ? e : (CdekClient::ResponseError.new e.response.code, e.response.message)
+          logger.debug "Response [ERROR]: #{response.body} #{error.inspect}"
           return CdekClient::Result.new response, response.body, [error]
         else
           return raw_request url, nil, method, request_params, nil
         end
       rescue Timeout::Error, Errno::ETIMEDOUT => e
         if Util.blank? retry_url
+          logger.debug "Response [ERROR]: #{response.body} #{e.inspect}"
           return CdekClient::Result.new response, response.body, [e]
         else
           return raw_request url, nil, method, request_params, nil
