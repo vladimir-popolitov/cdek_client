@@ -16,7 +16,9 @@ module CdekClient
   class AbstractClient
 
     def logger
-      unless @logger
+      if @logger
+        @logger
+      else
         @logger = Logger.new('log/cdek.log')
         @logger.formatter = CdekLoggerFormatter
         @logger
