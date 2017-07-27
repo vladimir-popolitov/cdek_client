@@ -7,10 +7,19 @@ require 'cdek_client/result'
 require 'cdek_client/util'
 
 module CdekClient
+  class CdekLoggerFormatter
+    def self.call(severity, time, progname, msg)
+      "#{Time.now.strftime("%F %T").to_s} #{severity} #{msg}\n"
+    end
+  end
+
   class AbstractClient
 
     def logger
-      @logger ||= ActiveSupport::Logger.new('cdek')
+      unless @logger
+        @logger = Logger.new('log/cdek.log')
+        @logger.formatter = CdekLoggerFormatter
+      end
     end
 
     protected
