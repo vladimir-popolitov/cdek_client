@@ -19,6 +19,7 @@ module CdekClient
       unless @logger
         @logger = Logger.new('log/cdek.log')
         @logger.formatter = CdekLoggerFormatter
+        @logger
       end
     end
 
