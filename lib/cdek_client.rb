@@ -6,20 +6,24 @@ module CdekClient
 
   HOSTS = {
     primary: {
-      host: 'gw.edostavka.ru',
-      port: 11443
+      host: 'integration.cdek.ru',
+      port: 443,
+      protocol: 'https'
     }.freeze,
     secondary: {
-      host: 'lk.cdek.ru',
-      port: 11443
+      host: 'integration.cdek.ru',
+      port: 443,
+      protocol: 'https'
     }.freeze,
     calculator_primary: {
       host: 'api.edostavka.ru',
-      port: 80
+      port: 80,
+      protocol: 'http'
     }.freeze,
     calculator_secondary: {
       host: 'lk.cdek.ru',
-      port: 8080
+      port: 8080,
+      protocol: 'http'
     }.freeze
   }.freeze
 
