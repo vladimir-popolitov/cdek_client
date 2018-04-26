@@ -36,7 +36,8 @@ module CdekClient
     call_courier:   'call_courier.php',
     delete_orders:  'delete_orders.php',
     orders_print:   'orders_print.php',
-    calculate:      'calculator/calculate_price_by_json.php'
+    calculate:      'calculator/calculate_price_by_json.php',
+    get_list_by_term: 'city/getListByTerm/json.php'
   }.freeze
 
   RESPONSE_NORMALIZATION_RULES = {
@@ -48,6 +49,18 @@ module CdekClient
         WeightMin: :to_f,
         WeightMax: :to_f
       }.freeze
+    }.freeze,
+    
+    get_list_by_term: {
+      id: :to_i,
+      postCodeArray: :to_a,
+      cityName: :to_s,
+      regionId: :to_i,
+      regionName: :to_s,
+      countryId: :to_i,
+      countryName: :to_s,
+      countryIso: :to_s,
+      name: :to_s
     }.freeze,
     
     order_statuses: {
