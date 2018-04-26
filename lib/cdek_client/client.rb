@@ -34,7 +34,7 @@ module CdekClient
     
     def get_list_by_term(params = {})
       params = normalize_request_data params
-      result = request url_for(:primary, :get_list_by_term), url_for(:secondary, :get_list_by_term), :get, params
+      result = request url_for(:calculator_primary, :get_list_by_term), url_for(:calculator_secondary, :get_list_by_term), :get, params
       if result.errors.any?
         result.set_data []
         return result
