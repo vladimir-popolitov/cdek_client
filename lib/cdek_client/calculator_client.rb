@@ -48,6 +48,25 @@ module CdekClient
       end
       return result
     end
+  
+    def get_list_by_term(params)
+      params = normalize_request_data params
+      result = request url_for(:calculator_primary, :get_list_by_term), url_for(:calculator_secondary, :get_list_by_term), :get, params
+      if result.errors.any?
+        result.set_data []
+        return result
+      end
+      if result.data.has_key? :ErrorCode
+        error = CdekClient.get_api_error result.data[:ErrorCode], result.data[:Msg]
+        result.add_error error
+        result.set_data []
+      else
+        normalized_data = Util.array_wrap result.data[:geonames]
+        normalized_data = normalize_response_data normalized_data, response_normalization_rules_for(:get_list_by_term)
+        result.set_data normalized_data
+      end
+      result
+    end
 
     private
 
