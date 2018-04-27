@@ -51,7 +51,13 @@ module CdekClient
   
     def get_list_by_term(params)
       params = normalize_request_data params
-      result = request url_for(:calculator_primary, :get_list_by_term), url_for(:calculator_secondary, :get_list_by_term), :get, params
+      
+      result = raw_request url_for(:calculator_primary, :get_list_by_term), url_for(:calculator_secondary, :get_list_by_term), :get, {}, params
+      if !Util.blank? result.data
+        data = Util.deep_symbolize_keys JSON.parse(result.data)
+        result.set_data data
+      end
+      
       if result.errors.any?
         result.set_data []
         return result
